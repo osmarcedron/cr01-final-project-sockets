@@ -150,6 +150,14 @@ int start_listen(void)
 	sin.sin_family = AF_INET;
 	sin.sin_port = htons(PORT);
 
+	int opt = 1;
+    error = kernel_setsockopt(svc->listen_socket, SOL_SOCKET,
+							  SO_REUSEADDR, (char *)&opt, sizeof (opt));
+    if (error < 0) {
+		printk(KERN_ERR "Error setting socket options %d\n", error);
+        return error;
+    }
+
 	error = kernel_bind(svc->listen_socket, (struct sockaddr*)&sin,
 			sizeof(sin));
 	if(error < 0) {
@@ -175,7 +183,7 @@ static int kthread_server(void* arg)
     complete(&thread->started);
 	start_listen();
 
-	int len = 4;
+	int len;
     while(!thread->stop && count < NTIMES)
     {
 		int i, size, error;
@@ -356,6 +364,8 @@ static void __exit kthread_exit(void)
 		sock_release(svc->listen_socket);
 		svc->listen_socket = NULL;
 	}
+
+	csvc->socket = NULL;
 
 	/* if (csvc->socket){ */
 	/* 	kernel_sock_shutdown(csvc->socket, SHUT_RDWR); */
