@@ -149,7 +149,8 @@ int send_msg(struct socket *sock, char *buf, int len)
 	msg.msg_name = 0;
 	msg.msg_namelen = 0;
 
-    // Send the message and print when it contains something (size > 0)
+    // Send the message and print when it contains
+    // something (size > 0)
 	size = kernel_sendmsg(sock, &msg, &iov, 1, len);
 
 	if (size > 0)
@@ -179,7 +180,9 @@ int start_listen(void)
 	sin.sin_family = AF_INET;
 	sin.sin_port = htons(PORT);
 
-    // Option needed to allow sockets to be reusable
+    // Option needed to allow sockets to be reusable, with this it is possible
+    // to run the code multiple times without needing extra time before the
+    // OS unbinds the IP addresses used
 	int opt = 1;
     error = kernel_setsockopt(svc->listen_socket, SOL_SOCKET,
 							  SO_REUSEADDR, (char *)&opt, sizeof (opt));
