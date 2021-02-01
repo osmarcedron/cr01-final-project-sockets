@@ -8,9 +8,14 @@ Thread kernel module for Scalevisor project.
 {\ttfamily \#include $<$linux/init.\+h$>$}\newline
 {\ttfamily \#include $<$linux/module.\+h$>$}\newline
 {\ttfamily \#include $<$linux/kernel.\+h$>$}\newline
+{\ttfamily \#include $<$linux/random.\+h$>$}\newline
 {\ttfamily \#include $<$linux/delay.\+h$>$}\newline
 {\ttfamily \#include $<$linux/kthread.\+h$>$}\newline
+{\ttfamily \#include $<$linux/wait.\+h$>$}\newline
 {\ttfamily \#include $<$linux/completion.\+h$>$}\newline
+{\ttfamily \#include $<$linux/slab.\+h$>$}\newline
+{\ttfamily \#include $<$linux/spinlock.\+h$>$}\newline
+{\ttfamily \#include $<$net/sock.\+h$>$}\newline
 Include dependency graph for kthread.\+c\+:
 \nopagebreak
 \begin{figure}[H]
@@ -23,27 +28,75 @@ Include dependency graph for kthread.\+c\+:
 \begin{DoxyCompactItemize}
 \item 
 struct \mbox{\hyperlink{structkthread__thread}{kthread\+\_\+thread}}
-\begin{DoxyCompactList}\small\item\em Argument structure for thread. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Argument structure for thread. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structservice}{service}}
+\begin{DoxyCompactList}\small\item\em Includes a socket used for listening (listen\+\_\+socket) and a process descriptor (thread). \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structclient__service}{client\+\_\+service}}
+\begin{DoxyCompactList}\small\item\em Includes a socket used for sending (socket) and a process descriptor (thread). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{kthread_8c_a614217d263be1fb1a5f76e2ff7be19a2}\label{kthread_8c_a614217d263be1fb1a5f76e2ff7be19a2}} 
+\#define {\bfseries P\+O\+RT}~2325
+\end{DoxyCompactItemize}
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
+\mbox{\Hypertarget{kthread_8c_afff07b27759152e4fe85c06c6f14c6c9}\label{kthread_8c_afff07b27759152e4fe85c06c6f14c6c9}} 
+{\bfseries module\+\_\+param} (M\+A\+X\+B\+Y\+T\+ES, int, S\+\_\+\+I\+R\+U\+SR$\vert$S\+\_\+\+I\+W\+U\+SR)
+\item 
+\mbox{\Hypertarget{kthread_8c_a71a6c2080c8ddcdefcee08f55f6d4174}\label{kthread_8c_a71a6c2080c8ddcdefcee08f55f6d4174}} 
+{\bfseries module\+\_\+param} (N\+T\+I\+M\+ES, int, S\+\_\+\+I\+R\+U\+SR$\vert$S\+\_\+\+I\+W\+U\+SR)
+\item 
+\mbox{\Hypertarget{kthread_8c_a36e18ace4db4734f958ec99ebaa7724a}\label{kthread_8c_a36e18ace4db4734f958ec99ebaa7724a}} 
+int \mbox{\hyperlink{kthread_8c_a36e18ace4db4734f958ec99ebaa7724a}{recv\+\_\+msg}} (struct socket $\ast$sock, unsigned char $\ast$buf, int len)
+\begin{DoxyCompactList}\small\item\em Receive message function. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{kthread_8c_ac2b0e2c4206f575b51abee35310f46b3}\label{kthread_8c_ac2b0e2c4206f575b51abee35310f46b3}} 
+int \mbox{\hyperlink{kthread_8c_ac2b0e2c4206f575b51abee35310f46b3}{send\+\_\+msg}} (struct socket $\ast$sock, char $\ast$buf, int len)
+\begin{DoxyCompactList}\small\item\em Send message function. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{kthread_8c_a1aeb078c5f903bf8759986f04232a5b6}\label{kthread_8c_a1aeb078c5f903bf8759986f04232a5b6}} 
+int \mbox{\hyperlink{kthread_8c_a1aeb078c5f903bf8759986f04232a5b6}{start\+\_\+listen}} (void)
+\begin{DoxyCompactList}\small\item\em Setup all the variables (sockets, ports, ips) to be able to listen. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{kthread_8c_a3ae785bff31cf19a2389370130233b82}\label{kthread_8c_a3ae785bff31cf19a2389370130233b82}} 
 {\bfseries module\+\_\+init} (kthread\+\_\+init)
 \item 
 \mbox{\Hypertarget{kthread_8c_a1fad6672017875093b11552e79563bc7}\label{kthread_8c_a1fad6672017875093b11552e79563bc7}} 
 {\bfseries module\+\_\+exit} (kthread\+\_\+exit)
 \item 
-\mbox{\Hypertarget{kthread_8c_a5c95e2cd11cba226f5f3513060a8928e}\label{kthread_8c_a5c95e2cd11cba226f5f3513060a8928e}} 
-{\bfseries M\+O\+D\+U\+L\+E\+\_\+\+L\+I\+C\+E\+N\+SE} (\char`\"{}Dual B\+SD/G\+PL\char`\"{})
+\mbox{\Hypertarget{kthread_8c_ad94b36675e7eb067ea3ce6ff9e244a44}\label{kthread_8c_ad94b36675e7eb067ea3ce6ff9e244a44}} 
+{\bfseries M\+O\+D\+U\+L\+E\+\_\+\+L\+I\+C\+E\+N\+SE} (\char`\"{}G\+PL\char`\"{})
 \item 
-\mbox{\Hypertarget{kthread_8c_a9426dfbab907bd146861511ccd8141ee}\label{kthread_8c_a9426dfbab907bd146861511ccd8141ee}} 
-{\bfseries M\+O\+D\+U\+L\+E\+\_\+\+A\+U\+T\+H\+OR} (\char`\"{}Sebastien Vincent\char`\"{})
+\mbox{\Hypertarget{kthread_8c_a6eaf16d851ca8f5d0fc62b6dda8cf7e3}\label{kthread_8c_a6eaf16d851ca8f5d0fc62b6dda8cf7e3}} 
+{\bfseries M\+O\+D\+U\+L\+E\+\_\+\+A\+U\+T\+H\+OR} (\char`\"{}Osmar cedron, Victor Merckle\char`\"{})
 \item 
-\mbox{\Hypertarget{kthread_8c_a138357dc4ef33821476e36f17543f66c}\label{kthread_8c_a138357dc4ef33821476e36f17543f66c}} 
-{\bfseries M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+S\+C\+R\+I\+P\+T\+I\+ON} (\char`\"{}kthread module\char`\"{})
+\mbox{\Hypertarget{kthread_8c_ae729ccf7ef983abd04f85a1d4f416b2d}\label{kthread_8c_ae729ccf7ef983abd04f85a1d4f416b2d}} 
+{\bfseries M\+O\+D\+U\+L\+E\+\_\+\+D\+E\+S\+C\+R\+I\+P\+T\+I\+ON} (\char`\"{}Kthread module\char`\"{})
 \item 
 \mbox{\Hypertarget{kthread_8c_a4b75c2cb371865e62f06fc635df9401e}\label{kthread_8c_a4b75c2cb371865e62f06fc635df9401e}} 
 {\bfseries M\+O\+D\+U\+L\+E\+\_\+\+V\+E\+R\+S\+I\+ON} (\char`\"{}0.\+1\char`\"{})
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+wait\+\_\+queue\+\_\+head\+\_\+t \mbox{\hyperlink{kthread_8c_aae62a9151cad47e2f5e89b504060b5c4}{wait\+\_\+queue}}
+\begin{DoxyCompactList}\small\item\em Wait queue is a data structure to manage threads that are waiting for some condition to become true. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{kthread_8c_a021cf21b183f42c3c6dea266ae776917}\label{kthread_8c_a021cf21b183f42c3c6dea266ae776917}} 
+wait\+\_\+queue\+\_\+head\+\_\+t {\bfseries client\+\_\+queue}
+\item 
+\mbox{\Hypertarget{kthread_8c_a29cae6ff4c31a13f957e3808d4ef8546}\label{kthread_8c_a29cae6ff4c31a13f957e3808d4ef8546}} 
+int {\bfseries wait\+\_\+queue\+\_\+flag} = 0
+\item 
+\mbox{\Hypertarget{kthread_8c_aed75320611960ecd2d5a01ed2d587a84}\label{kthread_8c_aed75320611960ecd2d5a01ed2d587a84}} 
+int {\bfseries client\+\_\+queue\+\_\+flag} = 0
+\item 
+\mbox{\Hypertarget{kthread_8c_a544b589bf1c416f3bb2c6271904f86be}\label{kthread_8c_a544b589bf1c416f3bb2c6271904f86be}} 
+struct socket $\ast$ {\bfseries acsock}
+\item 
+\mbox{\Hypertarget{kthread_8c_a0102e58085325a85a831a4d1bbb08a78}\label{kthread_8c_a0102e58085325a85a831a4d1bbb08a78}} 
+struct \mbox{\hyperlink{structservice}{service}} $\ast$ {\bfseries svc}
+\item 
+\mbox{\Hypertarget{kthread_8c_a9b6ffc5ea0c6fc68c9f4b16644951f4b}\label{kthread_8c_a9b6ffc5ea0c6fc68c9f4b16644951f4b}} 
+struct \mbox{\hyperlink{structclient__service}{client\+\_\+service}} $\ast$ {\bfseries csvc}
 \end{DoxyCompactItemize}
 
 
@@ -51,8 +104,22 @@ struct \mbox{\hyperlink{structkthread__thread}{kthread\+\_\+thread}}
 Thread kernel module for Scalevisor project. 
 
 \begin{DoxyAuthor}{Author}
-Osmar Cedron \& Victor Merckle 
+Osmar Cedron, Victor Merckle 
 \end{DoxyAuthor}
 \begin{DoxyDate}{Date}
 2021 
 \end{DoxyDate}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{kthread_8c_aae62a9151cad47e2f5e89b504060b5c4}\label{kthread_8c_aae62a9151cad47e2f5e89b504060b5c4}} 
+\index{kthread.c@{kthread.c}!wait\_queue@{wait\_queue}}
+\index{wait\_queue@{wait\_queue}!kthread.c@{kthread.c}}
+\doxysubsubsection{\texorpdfstring{wait\_queue}{wait\_queue}}
+{\footnotesize\ttfamily wait\+\_\+queue\+\_\+head\+\_\+t wait\+\_\+queue}
+
+
+
+Wait queue is a data structure to manage threads that are waiting for some condition to become true. 
+
+In this particular case, we have one for the server (wait\+\_\+queue) and one for the client (client\+\_\+queue). 

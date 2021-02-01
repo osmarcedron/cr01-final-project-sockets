@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['kthread_5fthread_6',['kthread_thread',['../structkthread__thread.html',1,'']]]
+  ['client_5fservice_13',['client_service',['../structclient__service.html',1,'']]]
 ];

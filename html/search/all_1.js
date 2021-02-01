@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['started_2',['started',['../structkthread__thread.html#a8127e5915424fa2a5230597f55289082',1,'kthread_thread']]],
-  ['stop_3',['stop',['../structkthread__thread.html#a4b365c2cae12d55e2ad2c5990ffef1c8',1,'kthread_thread']]],
-  ['stopped_4',['stopped',['../structkthread__thread.html#a38000dd71ee101114c6db4715e96be0b',1,'kthread_thread']]]
+  ['kthread_2ec_2',['kthread.c',['../kthread_8c.html',1,'']]],
+  ['kthread_5fthread_3',['kthread_thread',['../structkthread__thread.html',1,'']]]
 ];
