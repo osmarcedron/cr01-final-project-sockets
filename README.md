@@ -1,13 +1,15 @@
-# CR01 Project
+# CR01 Project (step 1)
 
-## Manually
+Completely done in Kernel spaces and 100% working.
+
+## Run (manually)
 make
 
 make run
 
 make uninstall
 
-## Script
+## Run (script)
 sh demo.sh
 
 It can be run many times as the sockets are reusable
