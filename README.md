@@ -1,8 +1,11 @@
 # CR01 Project
 
-## Compile
+## Manually
 make
-## Load the module
 make run
-## Clean
 make uninstall
+
+## Script
+sh demo.sh
+
+It can be run many times as the sockets are reusable
