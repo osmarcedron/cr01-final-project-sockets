@@ -2,7 +2,9 @@
 
 ## Manually
 make
+
 make run
+
 make uninstall
 
 ## Script
