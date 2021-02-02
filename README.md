@@ -11,3 +11,6 @@ make uninstall
 sh demo.sh
 
 It can be run many times as the sockets are reusable
+
+## Extra
+It includes documentation (doxygen) in the folder html
